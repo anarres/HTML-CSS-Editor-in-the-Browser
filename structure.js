@@ -35,7 +35,7 @@ var Site = {
 function textInput(name, label, value) {
     var html = "<p>";
     html += label;
-    html += "</p><input type='text' class='listenBlur' id='";
+    html += ":</p><input type='text' class='listenBlur' id='";
     html += name;
     html += "'  value='";
     html += value;
@@ -46,14 +46,13 @@ function textInput(name, label, value) {
 function colorInput(name, label, value) {
     var html = "<p>";
     html += label;
-    html += "</p><input type='text' class='listenBlur color' id='";
+    html += ":</p><input type='text' class='listenBlur color' id='";
     html += name;
     html += "'  value='";
     html += value;
     html += "'>";
     return html;
 }
-
 
 
 /* Takes a Site object */
@@ -78,7 +77,6 @@ function menuInput(s) {
             var downID = id + "Down";
             var removeID = id + "Remove";
 
-            html += "<p>Page title</p>";
             html += "<input type='text' class='listenBlur' id='";
             html += id;
             html += "' value='";
@@ -87,17 +85,17 @@ function menuInput(s) {
 
             html += "<button id='";
             html += upID;
-            html += "' class='listenClick smallButton'>(up)</button>"; 
+            html += "' class='listenClick smallButton'><img src='images/arrow-up.png' title='up' alt='up' class='icon'></button>"; 
 
             html += "<button id='";
             html += downID;
-            html += "' class='listenClick smallButton'>(down)</button>";
+            html += "' class='listenClick smallButton'><img src='images/arrow-down.png' alt='down' class='icon'></button>";
 
             html += "<button id='"
             html += removeID;
-            html += "' class='listenClick smallButton'>(remove)</button>";
+            html += "' class='listenClick smallButton'><img src='images/remove-x.png' alt='remove' class='icon'></button>";
 
-            html += "(<a href=''>edit page content</a>)</span>";
+            html += "<a href=''>Edit page content</a><br>";
         }
     html += "<p><button class='listenClick' id='addPage'>Add a new page to this menu</button></p>";
     }
@@ -110,9 +108,9 @@ function getStructureInputs(Site) {
 
     /* Title, description, footer */
 
-    html = textInput('title','Title:',Site['title']);
-    html += textInput('description','Description:',Site['description']);
-    html += textInput('footer','Footer:',Site['footer']);
+    html = textInput('title','<strong>Title</strong> (appears in browser tab and may appear in search results)',Site['title']);
+    html += textInput('description','<strong>Description</strong> (may appear in search results)',Site['description']);
+    html += textInput('footer','<strong>Footer</strong> (appears at the bottom of every page)',Site['footer']);
 
     /* This website has X menus */
 
@@ -126,8 +124,6 @@ function getStructureInputs(Site) {
     return html;
 }
 
-
-
 function getDesignInputs(Design) {
     var html = "";
     for (var i=0; i<Design.length; i++) {
@@ -138,14 +134,9 @@ function getDesignInputs(Design) {
         else if (Design[i]['type'] == "color") {
             html += colorInput(Design[i]['name'], Design[i]['label'], Design[i]['value']);
         }
-
     }
     return html;
 }
-
-
-
-
 
 
 

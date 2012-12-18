@@ -1,0 +1,65 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+body {
+    font-family: Helvetica, sans;
+    background-image: url('images/gears11.png');
+    background-color: #cdb40a;
+}
+input, textarea, button {
+    padding: 1px 5px;
+    padding-top: 3px;
+    border-radius: 2px;
+    border: 1px solid #000;
+    font-size: 1em;
+    font-family: Helvetica, sans;
+    background-color: #fff;
+    margin-bottom: 20px;
+}
+input, textarea {
+    cursor: text;
+    font-family: "Lucida Console", Monaco, monospace;
+}
+button {
+    cursor: pointer;
+    background-image: url('images/button-gradient.png');
+    background-size: 100%;
+    border-radius: 5px;
+    
+}
+button.smallButton {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+button:hover {
+    background-image: url('images/button-gradient-highlight.png');
+}
+h1, h2, h3 {
+    font-size: 1.5em;
+    padding: 10px 0px;
+    padding-top: 15px;
+    font-weight: normal;
+}
+h1 {
+    font-size: 2.5em;
+    padding: 15px 0px;
+}
+div#container {
+    max-width: 800px;
+    margin: 0px auto;
+    padding: 0px 60px;
+    padding-right: 100px;
+    border-left: 10px dashed grey;
+    border-right: 10px dashed grey;
+    border-bottom: 10px dashed grey;
+    background-color: #fff;
+}
+img.icon {
+    width: 25px;
+    height: auto;
+}
+a {
+    color: #063b77;
+    text-decoration: underline;

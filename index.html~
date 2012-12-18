@@ -1,0 +1,225 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title></title>
+<meta name="description" content="FIXME">
+<link rel="icon" type="image/png" href="FIXME.png">
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<script type="text/javascript" src="templates/basic.js"></script>
+<script type="text/javascript" src="utils.js"></script>
+<script type="text/javascript" src="interfaceHtml.js"></script>
+<script type="text/javascript" src="websiteStructure.js"></script>
+<script type="text/javascript" src="templateWrangler.js"></script>
+<script type="text/javascript" src="json/json2.js"></script>
+<script type="text/javascript" src="remember.js"></script>
+
+<script type="text/javascript">
+function preview() {
+
+    var html = getSiteHtml(templateHtml, Site);
+    html = getHtml(html, Design);
+    html = stripHtmlComments(html);
+
+    newwindow=window.open();
+    newdocument=newwindow.document;
+    newdocument.write(html);
+    newdocument.close();
+}
+
+function addEventListeners() {
+    var blurArray = getElementsByClassName(document, 'listenBlur');
+    var clickArray = getElementsByClassName(document, 'listenClick');
+    var designBlurArray = getElementsByClassName(document, 'designBlur');
+
+    for (var k=0; k<designBlurArray.length; k++) {
+        if (typeof(designBlurArray[k].onblur) != "function") {
+            designBlurArray[k].addEventListener('blur', function (e) {
+                var id = e.target.id;
+
+                // Loop thru Design objs looking for the right one 
+                for (var m=0; m<Design.length; m++) {
+                    if (id == Design[m]['name']) {
+                        Design[m]['value'] = e.target.value;
+                        break;
+                    }
+                }
+            }, false);
+        }
+    }
+
+    for (var i=0; i<blurArray.length; i++) {
+        // Only add event listener if the isn't one already
+        if (typeof(blurArray[i].onblur) != "function") {
+            blurArray[i].addEventListener('blur', function (e) {
+                var id = e.target.id;
+                if (id == "title") {
+                    Site['title'] = e.target.value;
+                }
+                else if (id == "description") {
+                    Site['description'] = e.target.value;
+                }
+                else if (id == "footer") {
+                    Site['footer'] = e.target.value;
+                }
+                else {
+                    var strIndex = id.slice(4,5);
+                    index = parseInt(strIndex);
+                    Site['menus'][0]['pagesOrLinks'][index]['title'] = e.target.value;
+                }
+                displayForm(Site, Design);
+            }, false);
+        }
+    }
+
+    for (var j=0; j<clickArray.length; j++) {
+        // Only add event listener if the isn't one already
+        if (typeof(clickArray[j].onchange) != "function") {
+
+            clickArray[j].addEventListener('click', function (e) {
+                var id = e.target.id;
+
+                if (id.slice(-2) == "Up") {
+                    var strPageId = id.slice(4,5);
+                    var pageID = parseInt(strPageId);
+                    Site = pageUp(Site, 0, pageID);
+                    displayForm(Site, Design);
+                }
+                else if (id.slice(-4) == "Down") {
+                    var strPageId = id.slice(4,5);
+                    var pageID = parseInt(strPageId);
+                    Site = pageDown(Site, 0, pageID);
+                    displayForm(Site, Design);
+                }
+                else if (id.slice(-6) == "Remove") {
+                    var strPageId = id.slice(4,5);
+                    var pageID = parseInt(strPageId);
+                    Site = pageRemove(Site, 0, pageID);
+                    displayForm(Site, Design);
+                }
+                else if (id == "addPage") {
+                    Site = pageAdd(Site, 0);
+                    displayForm(Site, Design);
+                }
+
+            }, false);
+        }
+    }
+}
+
+function displayForm(Site, Design) {
+
+    // Save the current state of things to localStorage
+
+
+    var html = getStructureInputs(Site);
+    document.getElementById('myForm').innerHTML = html;
+    var moreHtml = getDesignInputs(Design);
+    document.getElementById('designForm').innerHTML = moreHtml;
+    addEventListeners();
+}
+
+
+/* Global vars, for now at least */
+
+
+var defaultPageContent = "<h1>Welcome!</h1><h2>Lorem ipsum dolor</h2> <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.  Donec odio. Quisque volutpat mattis eros.  Nullam malesuada erat ut turpis. Suspendisse urna nibh,  viverra non, semper suscipit, posuere a, pede.</p> <img src='http://content.mycutegraphics.com/graphics/turtle/cute-turtle.png'  style='width:200px;height:auto;'> <h2> Aliquam porttitor mauris sit</h2>  <h3>Aliquam porttitor mauris sit</h3> <p> Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis.</p> <ul> <li> Morbi in sem quis dui placerat ornare.</li> <li>  Pellentesque </li> <li> odio nisi, euismod in</li> <li> pharetra a,</li> <li>  ultricies in, diam. </li> <li> Sed arcu. Cras consequat.</li> </ul><!--pageContentEND-->";
+
+var Design = [
+    {
+    'name':'borderWidth',
+    'type':'text',
+    'label':'Border width in pixels',
+    'value': '10'
+    },
+    {
+    'name':'backgroundColor',
+    'type':'color',
+    'label':'Background colour',
+    'value': 'cdb40a'
+    }
+];            
+
+var Site = {
+    'title':'My new website',
+    'description':'Put a description here.',
+    'footer':'This is the bottom of the page. Thanks for reading!',
+    'titleLabel':'Title',
+    'descriptionLabel':'Description',
+    'footerLabel':'Footer',
+
+    'menus': [
+        {'title':'Main menu',
+        'pagesOrLinks': [
+            {'title':'Home',
+            'content':defaultPageContent},
+            {'title':'About',
+            'content':''},
+            {'title':'Contact',
+            'content':''}
+        ]
+        } /* END OF MENU 0 */
+
+    ] /* END OF MENUS */
+};
+
+
+
+function init() {
+    var names = getNames();
+    savedProjectsHtml = projInputs(names);
+    document.getElementById('savedProjects').innerHTML = savedProjectsHtml;
+    displayForm(Site, Design);
+}
+
+
+</script>
+
+<body onload="init()">
+
+<div id="container">
+
+<h1>Simple website editor</h1>
+
+<br>
+
+<div id="savedProjects"></div>
+
+<br>
+
+<div id="myForm"></div>
+
+<br>
+
+<h3>Website design and appearance options</h3>
+
+<p>Current template: FIXME. <a href="templateGallery.html">Browse templates</a></p>
+
+<br>
+
+<div id="designForm"></div> 
+
+
+<div id="previewTest"></div>
+
+<br>
+
+<button onclick="preview()" style="width:100%">
+PREVIEW
+</button>
+
+<br>
+
+<button onclick="FIXME" style="width:100%">
+SAVE
+</button>
+
+<div style="height:250px;clear:both;">.</div>
+
+</div> <!--#container-->
+
+</body>
+
+</html>

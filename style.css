@@ -60,4 +60,12 @@ img.icon {
     width: 25px;
     height: auto;
 }
+a {
+    color: #063b77;
+    text-decoration: underline;
+}
+a:hover {
+    color: #63089c;
+}
+
 

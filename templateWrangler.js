@@ -13,6 +13,7 @@ function getStartTag(id) {
     tag += "-->";
     return tag;
 }
+
 function getEndTag(id) {
     var tag = "<!--";
     tag += id;
@@ -20,9 +21,26 @@ function getEndTag(id) {
     tag += "-->";
     return tag;
 } 
+
 function stripHtmlComments(html) {
     html = html.replace(/<!--[\s\S]*?-->/g , "")
     return html;
+}
+
+
+/*
+ Takes a text string, finds and returns the substring
+ between (but not including) the startString and endString.
+*/
+function getValueOut(text, startString, endString) {
+    var stringArray = text.split(startString);
+    var result = "";
+    if( stringArray.length == 2 ) { 
+        //alert(stringArray[1]);
+        var newArray = stringArray[1].split(endString);
+        result = newArray[0];
+    }
+    return result;
 }
 
 
@@ -47,7 +65,7 @@ function doReplacement(template, startString, endString, insertText) {
     }
 }
 
-function getSiteHtml(template, siteObj) {
+function getSiteHtml(template, siteObj, pageIndex) {
     var html = doReplacement(template, "<!--STARTtitle-->", "<!--titleEND-->", siteObj['title']);
     html = doReplacement(html, "<!--STARTdescription-->", "<!--descriptionEND-->", siteObj['description']);
     html = doReplacement(html, "<!--STARTfooter-->", "<!--footerEND-->", siteObj['footer']);
@@ -64,18 +82,20 @@ function getSiteHtml(template, siteObj) {
         // Deal with multiple menus later
         html = doReplacement(html, "<!--STARTmenu-->", "<!--menuEND-->", menuHtml);
     }
+
+    // Page content
+    html = doReplacement( html, "<!--STARTpageContent-->", "<!--pageContentEND-->", 
+        siteObj['menus'][0]['pagesOrLinks'][pageIndex]['content'] );
+
     return html;
 }
 
 function getHtml(template, obj) {
-
     var html = template;
-
-
     for (var i=0; i<obj.length; i++) {
         var startTag = getStartTag(obj[i]['name']);
         var endTag = getEndTag(obj[i]['name']);
-        html = doReplacement(html, startTag, endTag, obj['value']);
+        html = doReplacement(html, startTag, endTag, obj[i]['value']);
     }
     return html;
 }

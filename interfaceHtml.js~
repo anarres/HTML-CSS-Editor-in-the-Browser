@@ -32,6 +32,21 @@ var Site = {
 
 */
 
+function projInputs(names) {
+    if (names.length == 0) {
+        return "";
+    }
+    else {
+        var html = "Saved projects: ";
+        for (var i=0; i<names.length; i++) {
+            html += "<button class='listenClick' id='FIXME'>";
+            html += names[i];
+            html += "</button>";
+        }
+    }
+    return html;
+}
+
 function textInput(name, label, value) {
     var html = "<p>";
     html += label;
@@ -43,10 +58,33 @@ function textInput(name, label, value) {
     return html;
 }
 
+function designTextInput(name, label, value) {
+    var html = "<p>";
+    html += label;
+    html += ":</p><input type='text' class='designBlur' id='";
+    html += name;
+    html += "'  value='";
+    html += value;
+    html += "'>";
+    return html;
+}
+
+
 function colorInput(name, label, value) {
     var html = "<p>";
     html += label;
     html += ":</p><input type='text' class='listenBlur color' id='";
+    html += name;
+    html += "'  value='";
+    html += value;
+    html += "'>";
+    return html;
+}
+
+function designColorInput(name, label, value) {
+    var html = "<p>";
+    html += label;
+    html += ":</p><input type='text' class='designBlur color' id='";
     html += name;
     html += "'  value='";
     html += value;
@@ -95,14 +133,14 @@ function menuInput(s) {
             html += removeID;
             html += "' class='listenClick smallButton'><img src='images/remove-x.png' alt='remove' class='icon'></button>";
 
-            html += "<a href=''>Edit page content</a><br>";
+            html += "<a href='pageEditor.html?menu=0&page=";
+            html += j;
+            html += "'>Edit page content</a><br>";
         }
     html += "<p><button class='listenClick' id='addPage'>Add a new page to this menu</button></p>";
     }
     return html;
 }
-
-
 
 function getStructureInputs(Site) {
 
@@ -127,15 +165,15 @@ function getStructureInputs(Site) {
 function getDesignInputs(Design) {
     var html = "";
     for (var i=0; i<Design.length; i++) {
-
         if (Design[i]['type'] == "text") {
-            html += textInput(Design[i]['name'], Design[i]['label'], Design[i]['value']);
+            html += designTextInput(Design[i]['name'], Design[i]['label'], Design[i]['value']);
         }
         else if (Design[i]['type'] == "color") {
-            html += colorInput(Design[i]['name'], Design[i]['label'], Design[i]['value']);
+            html += designColorInput(Design[i]['name'], Design[i]['label'], Design[i]['value']);
         }
     }
     return html;
+    
 }
 
 

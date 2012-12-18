@@ -1,0 +1,68 @@
+<!doctype html>
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title></title>
+<meta name="description" content="FIXME">
+<link rel="icon" type="image/png" href="FIXME.png">
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<script type="text/javascript" src="tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+
+<script type="text/javascript">
+
+function initializeEditor() {
+    tinyMCE.init({
+        mode : "textareas",
+        theme : "advanced",
+        theme_advanced_buttons1 :"bold,italic,underline,|,justifyleft,justifycenter,justifyright,formatselect,|,bullist,numlist,|,link,unlink,anchor,image,|,code",
+        theme_advanced_toolbar_location : "top",
+        theme_advanced_toolbar_align : "left",
+        theme_advanced_statusbar_location : "bottom",
+        theme_advanced_resizing : true
+    });
+}
+
+function debug() {
+    alert( document.getElementById('tinymce').value );
+}
+
+</script>
+
+</head>
+
+<body onload="initializeEditor()">
+
+<div id="container">
+
+<h1>Page editor</h1>
+
+<br>
+
+<div id="textEditorContainer" style="border:2px solid grey;border-radius:4px;">
+
+<textarea id="tinymce" style="max-width:796px;font-size:2em;">
+</textarea>
+
+</div> <!--#textEditorContainer-->
+
+<br>
+
+<button onclick="debug()" style="width:100%">
+PREVIEW
+</button>
+
+<br>
+
+<button onclick="FIXME" style="width:100%">
+SAVE
+</button>
+
+<div style="height: 150px;"></div>
+
+</div> <!--#container-->
+
+</body>
+
+</html>

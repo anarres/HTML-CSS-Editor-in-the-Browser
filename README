@@ -1,0 +1,9 @@
+Extremely simple HTML and CSS templating system
+
+Allows for the creation of HTML/CSS website templates where certain values
+(e.g. title, background color, ...) can be configured by a user with no 
+coding knowledge.
+
+It's pure javascript and thus browser-only, with no server-side component.
+
+It's new and buggy and doesn't exactly work yet.

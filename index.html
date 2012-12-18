@@ -1,0 +1,161 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+<title></title>
+<meta name="description" content="FIXME">
+<link rel="icon" type="image/png" href="FIXME.png">
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<script type="text/javascript" src="templates/basic.js"></script>
+<script type="text/javascript" src="utils.js"></script>
+<script type="text/javascript" src="structure.js"></script>
+<script type="text/javascript" src="structureEdit.js"></script>
+<script type="text/javascript" src="templateWrangler.js"></script>
+
+<script type="text/javascript">
+
+function preview() {
+
+    var html = getSiteHtml(templateHtml, Site);
+    html = getHtml(html, templateNames);
+    html = stripHtmlComments(html);
+
+    newwindow=window.open();
+    newdocument=newwindow.document;
+    newdocument.write(html);
+    newdocument.close();
+}
+
+function addEventListeners() {
+    var blurArray = getElementsByClassName(document, 'listenBlur');
+    var clickArray = getElementsByClassName(document, 'listenClick');
+
+    for (var i=0; i<blurArray.length; i++) {
+        // Only add event listener if the isn't one already
+        if (typeof(blurArray[i].onblur) != "function") {
+            blurArray[i].addEventListener('blur', function (e) {
+                var id = e.target.id;
+                //alert(id);
+                if (id == "title") {
+                    Site['title'] = e.target.value;
+                }
+                else if (id == "description") {
+                    Site['description'] = e.target.value;
+                }
+                else if (id == "footer") {
+                    Site['footer'] = e.target.value;
+                }
+                else {
+                    var strIndex = id.slice(4,5);
+                    index = parseInt(strIndex);
+                    Site['menus'][0]['pagesOrLinks'][index]['title'] = e.target.value;
+                }
+                displayForm(Site);
+            }, false);
+        }
+    }
+
+    for (var j=0; j<clickArray.length; j++) {
+        // Only add event listener if the isn't one already
+        if (typeof(clickArray[j].onchange) != "function") {
+
+            clickArray[j].addEventListener('click', function (e) {
+                var id = e.target.id;
+
+                if (id.slice(-2) == "Up") {
+                    var strPageId = id.slice(4,5);
+                    var pageID = parseInt(strPageId);
+                    Site = pageUp(Site, 0, pageID);
+                    displayForm(Site);
+                }
+                else if (id.slice(-4) == "Down") {
+                    var strPageId = id.slice(4,5);
+                    var pageID = parseInt(strPageId);
+                    Site = pageDown(Site, 0, pageID);
+                    displayForm(Site);
+                }
+                else if (id.slice(-6) == "Remove") {
+                    var strPageId = id.slice(4,5);
+                    var pageID = parseInt(strPageId);
+                    Site = pageRemove(Site, 0, pageID);
+                    displayForm(Site);
+                }
+                else if (id == "addPage") {
+                    Site = pageAdd(Site, 0);
+                    displayForm(Site);
+                }
+            }, false);
+        }
+    }
+}
+
+function displayForm(Site) {
+    var html = getStructureInputs(Site);
+    document.getElementById('myForm').innerHTML = html;
+    var moreHtml = getDesignInputs(templateNames);
+    document.getElementById('designForm').innerHTML = moreHtml;
+    addEventListeners();
+
+}
+
+/* Global var */
+
+var Site = {
+    'title':'My new website',
+    'description':'Put a description here.',
+    'footer':'This is the bottom of the page. Thanks for reading!',
+    'titleLabel':'Title',
+    'descriptionLabel':'Description',
+    'footerLabel':'Footer',
+
+    'menus': [
+        {'title':'Main menu',
+        'pagesOrLinks': [
+            {'title':'Home',
+            'content':''},
+            {'title':'About',
+            'content':''},
+            {'title':'Contact',
+            'content':''}
+        ]
+        } /* END OF MENU 0 */
+
+    ] /* END OF MENUS */
+};
+
+function init() {
+    displayForm(Site);
+}
+</script>
+
+<body onload="init()">
+
+<div id="container">
+
+<h1>Simple website structure editor</h1>
+
+<div id="myForm"></div>
+
+
+<h3>Website design and appearance options</h3>
+
+<div id="designForm"></div> 
+
+
+<div id="previewTest"></div>
+
+<br>
+
+<button onclick="preview()" style="width:100%">
+PREVIEW
+</button>
+
+<div style="height:250px;clear:both;">.</div>
+
+</div> <!--#container-->
+
+</body>
+
+</html>
